@@ -1,6 +1,7 @@
 import React from "react";
-import { FlatList, Image, StyleSheet, View, Text } from "react-native";
+import { FlatList, Image, StyleSheet, View, Text, ActivityIndicator } from "react-native";
 import { usePokemonPaginate } from "../../hooks/usePokemonPaginate";
+import PokemonCard from "../common/PokemonCard";
 
 
 export default function HomeScreen() {
@@ -19,8 +20,14 @@ export default function HomeScreen() {
               data={pokemonList}
               numColumns={2}
               keyExtractor={(pokemon)=> String(pokemon.id) }
-              renderItem={({ item }) => <Text>{item.name}</Text> }
+              renderItem={({ item }) => <PokemonCard pokemon={item}/> }
               ListHeaderComponent={<Text style={styles.title}>Pokedex</Text>}
+              showsVerticalScrollIndicator={false}
+              ListFooterComponent={
+                <ActivityIndicator style={{ height: 200 }} size={50} />
+              }
+              onEndReached={loadPokemons}
+              onEndReachedThreshold={0.3}
             />
           </View>
         )

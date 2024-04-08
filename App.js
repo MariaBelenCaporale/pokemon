@@ -1,19 +1,16 @@
+import { NavigationContainer } from '@react-navigation/native';
 import { StyleSheet, Text, View } from 'react-native';
 import HomeScreen from './src/components/screens/HomeScreen';
+import 'react-native-gesture-handler';
+import { StackNavigator } from './src/router/StackNavigator';
+
+
 
 export default function App() {
   return (
-    <View style={styles.container}>
-      <HomeScreen />
-    </View>
+   <NavigationContainer>
+    <StackNavigator />
+   </NavigationContainer>
   );
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
