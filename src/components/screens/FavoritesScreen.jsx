@@ -6,7 +6,7 @@ export default function FavotiresScreen () {
     return (
         <View style={{top: top}}>
             <Text>
-                Favorites Screen
+                Mis palabras
             </Text>
         </View>
     )

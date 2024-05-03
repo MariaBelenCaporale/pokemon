@@ -1,72 +1,63 @@
-import { StatusBar } from "expo-status-bar";
 import React, { useState } from "react";
-import { StyleSheet, View, Text, Button } from "react-native";
+import { StyleSheet, View, Text, TextInput } from "react-native";
 import { TouchableOpacity } from "react-native-gesture-handler";
-import { useSafeAreaInsets } from "react-native-safe-area-context";
-import Card from "../Card";
+import { useNavigation } from "@react-navigation/native";
 
 export default function HomeScreen() {
-  const { top } = useSafeAreaInsets();
-  const cards = ["👽", "🤓", "💸", "🌎", "🤡", "💩"];
-  const [board, setBoard] = React.useState(() => shuffle([...cards, ...cards]));
+  const navigation = useNavigation();
+  const [showLoginForm, setShowLoginForm] = useState(false);
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
 
-  const [selectedCards, setSelectedCards] = React.useState([]);
-  const [matchedCards, setMatchedCards] = React.useState([]);
-  const [score, setScore] = React.useState(0);
-
-
-  React.useEffect(() => {
-    if(selectedCards.length < 2) return;
-    if (board[selectedCards[0]] === board[selectedCards[1]]) {
-      setMatchedCards([...matchedCards, ...selectedCards])
-      setSelectedCards([]);
-    } else {
-      const timeoutId = setTimeout(() => setSelectedCards([]) , 800);
-      return () => clearTimeout(timeoutId)
-    }
-  }, [selectedCards])
-
-
-  const handleTapCard = (index) => {
-    if(selectedCards.length >= 2 || selectedCards.includes(index)) return;
-    setSelectedCards([...selectedCards, index]);
-    setScore(score + 1);
+  const navigateToRegisterScreen = () => {
+    navigation.navigate("RegisterScreen");
   };
 
-  const didPlayerWin = () => matchedCards.length === board.length;
-  const resetGame = () =>{ 
-    setMatchedCards([]);
-    setScore(0);
-    setSelectedCards([]);
-};
+  const handleLogin = () => {
+    console.log("Email:", email);
+    console.log("Contraseña:", password);
+  };
+
   return (
-    <View style={[styles.container, { paddingTop: top + 1 }]}>
-      <Text style={styles.title}>
-        {didPlayerWin() ? "¡Ganaste!" : "MEMO"}</Text>
-      <Text style={styles.titleDos}>Movimientos: {score}</Text>
-      <View style={styles.borde}>
-      {board.map((card, index) => {
-        const isTurnedOver = selectedCards.includes(index) || matchedCards.includes(index)
-        return (
-          <Card
-            key={index}
-            isTurnedOver={isTurnedOver}
-            onPress={() => handleTapCard(index)}
-          >
-            {card}
-          </Card>
-        );
-      })}
+    <View style={styles.container}>
+      <Text style={styles.title}>Bienvenda</Text>
+
+      {showLoginForm && (
+        <View style={styles.formContainer}>
+          <TextInput
+            style={styles.input}
+            placeholder="Correo electrónico"
+            onChangeText={setEmail}
+            value={email}
+          />
+          <TextInput
+            style={styles.input}
+            placeholder="Contraseña"
+            onChangeText={setPassword}
+            value={password}
+            secureTextEntry
+          />
+          <TouchableOpacity style={styles.loginButton} onPress={handleLogin}>
+            <Text style={styles.loginButtonText}>Ingresar</Text>
+          </TouchableOpacity>
+        </View>
+      )}
+
+      <View style={styles.containerBtn}>
+        <TouchableOpacity
+          style={styles.boton}
+          onPress={() => setShowLoginForm(!showLoginForm)}
+        >
+          <Text style={styles.loginButtonText}>{showLoginForm ? "Volver" : "Ingresar"}</Text>
+        </TouchableOpacity>
+
+        <TouchableOpacity
+          style={styles.botonRegistro}
+          onPress={navigateToRegisterScreen}
+        >
+          <Text>Registrarme</Text>
+        </TouchableOpacity>
       </View>
-      {didPlayerWin() && 
-      <TouchableOpacity style={styles.reinicio} onPress={resetGame} >
-        <Text style={styles.texto}>
-          Reiniciar
-        </Text>
-      </TouchableOpacity>
-      // <Button style={styles.reinicio} onPress={resetGame} title="Reiniciar" />}
-}
-      <StatusBar style="black" />
     </View>
   );
 }
@@ -75,46 +66,50 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     alignItems: "center",
+    justifyContent: "space-evenly",
+    backgroundColor: "orange",
+  },
+  containerBtn: {
+    height: 90,
+    alignItems: "center",
+    gap: 10,
     justifyContent: "center",
-    backgroundColor: "#F5E8DD",
   },
   title: {
-    color: "#9CAFAA",
-    fontSize: 22,
-    fontWeight: "900",
+    color: "white",
+    fontWeight: "bold",
+    fontSize: 30,
   },
-  titleDos: {
-    color: "#9CAFAA",
-    fontSize: 20,
-  },
-  borde: {
-    flexDirection: "row",
-    flexWrap: "wrap",
-    justifyContent: "center",
-  },
-  reinicio: {
-    backgroundColor: "#9CAFAA",
-    width: 200,
-    marginTop: 20,
-    marginBottom: 30,
-    alignItems: "center",
-    justifyContent: "center",
-    borderRadius: 25,
-  },
-  texto: {
-    fontSize: 18,
+  boton: {
+    backgroundColor: "white",
+    borderRadius: 50,
     padding: 10,
-    width: 100,
+    alignItems: "center",
+    width: 150,
+  },
+  formContainer: {
+    alignItems: "center",
+  },
+  input: {
+    width: 250,
+    height: 40,
+    borderColor: "white",
+    borderWidth: 1,
+    borderRadius: 5,
+    marginVertical: 5,
+    paddingHorizontal: 10,
+  },
+  loginButton: {
+    backgroundColor: "white",
+    borderRadius: 5,
+    padding: 10,
+    width: 150,
+    borderRadius: 50,
+    marginTop: 10,
+  },
+  loginButtonText: {
+    color: "black",
+    fontSize: 16,
     textAlign: "center",
-    fontWeight: "700",
   },
 });
-
-// Para la mezcla de tarjetas
-function shuffle(array) {
-  for (let i = array.length - 1; i > 0; i--) {
-    const randomIndex = Math.floor(Math.random() * (i + 1));
-    [array[i], array[randomIndex]] = [array[randomIndex], array[i]];
-  }
-  return array;
-}

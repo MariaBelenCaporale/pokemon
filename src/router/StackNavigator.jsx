@@ -1,20 +1,21 @@
-
+import React from 'react'; // Asegúrate de importar React
 import { createStackNavigator } from '@react-navigation/stack';
 import HomeScreen from '../components/screens/HomeScreen';
+import RegisterScreen from '../components/screens/RegisterScreen';
 
-const Stack = createStackNavigator()
+const Stack = createStackNavigator();
 
-export function StackNavigator () {
+export function StackNavigator() {
   return (
-    <Stack.Navigator 
-    screenOptions={{
+    <Stack.Navigator
+      initialRouteName="HomeScreen"
+      screenOptions={{
         headerShown: false,
-        cardStyle: "white",
-    }}
+        cardStyle: 'white',
+      }}
     >
-        <Stack.Screen name="HomeScreen" component={HomeScreen} />
-      
+      <Stack.Screen name="HomeScreen" component={HomeScreen} />
+      <Stack.Screen name="RegisterScreen" component={RegisterScreen} />
     </Stack.Navigator>
   );
 }
-

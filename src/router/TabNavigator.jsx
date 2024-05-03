@@ -14,7 +14,7 @@ export function TabNavigator() {
       }}
       screenOptions={{
         headerShown: false,
-        tabBarActiveTintColor: "#35155D",
+        tabBarActiveTintColor: "orange",
         tabBarStyle: {
           position: "absolute",
           paddingBottom: 10,

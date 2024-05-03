@@ -9,6 +9,7 @@ export default function App() {
   return (
    <NavigationContainer>
     <TabNavigator />
+    
     {/* <StackNavigator /> */}
    </NavigationContainer>
   );
